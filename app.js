@@ -21,8 +21,13 @@ app.get('/', function(req, res) {
   console.log('home sent')
 
 
-  // flyUp(5000)
+ 
 });
+
+setTimeout(function(){
+  console.log('fly up')
+   flyUp(10000)
+ }, 10000)
 
 var quad_stats = {
   actual_throttle: 0,
@@ -36,7 +41,7 @@ var quad_stats = {
 
 function flyUp(ms) {
   var start = Date.now();
-  quad_stats.target_throttle = 30000;
+  quad_stats.target_throttle = 40000;
   var step = (quad_stats.target_throttle - quad_stats.set_throttle) / ms;
   var set_val = 0;
   doThisFor(function() {
@@ -185,7 +190,7 @@ var tb = require('toobusy')
       }
       // console.log(copter.telemetry)
       console.log('node lag is ', tb.lag())
-      console.log('node lag is ',copter.telemetry.acc)
+      // console.log('node lag is ',copter.telemetry.acc)
 
     }, 200)
   }

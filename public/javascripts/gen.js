@@ -161,13 +161,17 @@ function init() {
   // accel sensor 
   var accel_mat = new THREE.LineBasicMaterial({
     color: "green",
-    linewidth: 10,
+    linewidth: 20,
 
   });
   // set up accel axis
   var accel = new THREE.Geometry();
   accel.vertices.push(new THREE.Vector3(0, 0, 0));
-  end_vector = new THREE.Vector3(-300, -300, -300)
+  end_vector = new THREE.Vector3(0, 0, 0)
+  end_vector.x = 100
+  end_vector.y = 100
+  end_vector.z = 100
+
   // end_vector.applyMatrix(new THREE.Matrix4().makeTranslation(arm_length / 2, arm_height / 2, 0));
   accel.vertices.push(end_vector);
   accel_line = new THREE.Line(accel, accel_mat)
@@ -183,9 +187,6 @@ function init() {
   quad_group.add(m4_mesh)
   quad_group.add(v4_mesh)
   quad_group.add(accel_line)
-  // quad_group.position.x = 0
-  // quad_group.position.y = 0
-  // quad_group.position.z = 0
 
   scene.add(quad_group);
 
@@ -207,9 +208,11 @@ var pi = Math.PI
     v2_mesh.position.y = telem.motor.m2 / 1000
     v3_mesh.position.y = telem.motor.m3 / 1000
     v4_mesh.position.y = telem.motor.m4 / 1000
-    end_vector.x = telem.acc.x * 30
-    end_vector.y = telem.acc.z * 30
-    end_vector.z = telem.acc.y * 30
+    // console.log(end_vector)
+    end_vector.x = -telem.acc.x*100
+    end_vector.y = -telem.acc.z*100
+    end_vector.z = telem.acc.y*100
+    console.log(telem.motor)
     // var eu = new THREE.Quaternion(0, -1, 1)
     // console.log(accel_line.geometry.vertices[1])
     // console.log(end_vector.angleTo(x_axis.geometry.vertices[1]))
@@ -226,13 +229,17 @@ var pi = Math.PI
 var angle = 0
 
   function animate() {
-    console.log('animate')
-    angle += 100
-    // camera.position.x +=10
+    // end_vector.x = 0
+    // end_vector.y = 0
+    // end_vector.z = 100
+    // console.log(end_vector.position)
+    // console.log('animate')
+    // angle += 100
+    // camera.position.x += 10
     // accel_line.geometry.vertices[1].applyEuler(new THREE.Euler( 0, 1, angle, 'XYZ' ))
-    accel_line.geometry.vertices[1].applyAxisAngle("x", angle)
-    camera.lookAt(quad_group.position)
-    renderer.render(scene, camera);
+    // accel_line.geometry.vertices[1].applyAxisAngle("x", angle)
+    // camera.lookAt(quad_group.position)
+    // renderer.render(scene, camera);
 
   }
 
