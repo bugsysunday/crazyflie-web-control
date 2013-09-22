@@ -25,6 +25,10 @@ app.get('/', function(req, res) {
  
 });
 
+// setTimeout(function(){
+//   console.log('fly up')
+//    // flyUp(10000)
+//  }, 10000)
 
 var quad_stats = {
   actual_throttle: 0,
