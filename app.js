@@ -26,7 +26,7 @@ app.get('/', function(req, res) {
 
 setTimeout(function(){
   console.log('fly up')
-   flyUp(10000)
+   // flyUp(10000)
  }, 10000)
 
 var quad_stats = {
