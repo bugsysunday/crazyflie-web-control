@@ -19,15 +19,12 @@ console.log('app listeneing')
 app.get('/', function(req, res) {
   res.render('home')
   console.log('home sent')
-
+  console.log('fly up')
+  fly(15000, 'ground')
 
  
 });
 
-setTimeout(function(){
-  console.log('fly up')
-   flyUp(10000)
- }, 10000)
 
 var quad_stats = {
   actual_throttle: 0,
@@ -39,9 +36,20 @@ var quad_stats = {
 };
 
 
-function flyUp(ms) {
+function fly(ms, height) {
+  heights = {
+    ground: 25000,
+    one_foot: 35000,
+    ten_feet: 45000,
+    twenty_feet: 60000
+  }
+
+  flyUp(10000,25000, land(10000))
+}
+
+function flyUp(ms, throttle, callback) {
   var start = Date.now();
-  quad_stats.target_throttle = 40000;
+  quad_stats.target_throttle = throttle;
   var step = (quad_stats.target_throttle - quad_stats.set_throttle) / ms;
   var set_val = 0;
   doThisFor(function() {
@@ -49,25 +57,25 @@ function flyUp(ms) {
     set_val = quad_stats.set_throttle + step * diff
     console.log('value value at time', set_val, diff)
     copter.driver.setpoint(0, 0, 0, Math.floor(set_val))
-  }, ms, function() {
-    quad_stats.set_throttle = quad_stats.target_throttle;
-    console.log('Done Flying up at ', Date.now() - start)
-    land(500)
-
-  })
+  }, ms, callback())
 }
 
 function land(ms) {
+  console.log('Done Flying up at ', Date.now() - start)
+
+  console.log('land')
   var start = Date.now();
   quad_stats.target_throttle = 0;
   var set_val = 0;
   doThisFor(function() {
-    set_val = (quad_stats.target_throttle - quad_stats.set_throttle) / 2
-
+    var diff = Date.now() - start
+    step = (quad_stats.set_throttle - quad_stats.target_throttle) / ms
+    set_val = quad_stats.set_throttle - step * diff
+    console.log(set_val)
     if (set_val > 0) {
       console.log('value value at time', set_val, Date.now() - start)
       copter.driver.setpoint(0, 0, 0, Math.floor(set_val))
-      quad_stats.set_throttle = Math.floor(set_val)
+      //quad_stats.set_throttle = Math.floor(set_val)
     }
 
 
