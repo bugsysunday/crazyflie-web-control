@@ -22,10 +22,10 @@ var optimist = require('optimist')
       //       return copters[i];
       //   }
       // }
-      return "radio://1/10/250KPS";
+      return "radio://1/1/250KPS";
     }).then(function(uri) {
       console.log('uri 0------------->', uri)
-      return copter.connect("radio://1/10/250KPS");
+      return copter.connect("radio://1/1/250KPS");
     }).then(function() {
       console.log('copter is ready')
       console.log('lag is ', tb.lag())
@@ -44,28 +44,38 @@ start()
 var quad_state = {
   target_throttle: 0,
   last_set_throttle: 0,
-  target_date: 0
+  target_throttle_time: 0
 };
 
 var commands = [{
-  action: fly,
-  period: 1000
+  action: flyTo,
+  period: 2000,
+  target_throttle: 45000
 }, {
-  action: land,
-  period: 1000
+  action: flyTo,
+  period: 200,
+  target_throttle: 37000
+}, {
+  action: flyTo,
+  period: 3000,
+  target_throttle: 37000
+}, {
+  action: flyTo,
+  period: 2000,
+  target_throttle:10000
 }]
 
 
   function pullNext() {
-    var current = commands.shift() 
+    var current = commands.shift()
     if (!current) process.exit();
 
-    current.action(current.period)
+    current.action(current.period, current.target_throttle)
   }
 
-  function fly(ms) {
+  function flyTo(ms, throttle) {
     console.log('fly!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-    quad_state.target_throttle = 20000;
+    quad_state.target_throttle = throttle;
     quad_state.target_throttle_time = Date.now() + ms;
   }
 
@@ -78,7 +88,7 @@ var commands = [{
 
 
   function hover() {
-
+    flyTo(1, 35000, callback)
   }
 
 var control;
@@ -93,7 +103,7 @@ function startControl() {
     var time_to_target = quad_state.target_throttle_time - now;
 
     if (time_to_target > 0) {
-      if (time_to_target < 100) { // last step here
+      if (time_to_target < send_every) { // last step here
         console.log('less than 100 ms', time_to_target)
         quad_state.last_set_throttle = quad_state.target_throttle
         copter.driver.setpoint(0, 0, 0, quad_state.last_set_throttle)
