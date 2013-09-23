@@ -25,7 +25,7 @@ var optimist = require('optimist')
       return "radio://1/1/250KPS";
     }).then(function(uri) {
       console.log('uri 0------------->', uri)
-      return copter.connect("radio://1/1/250KPS");
+      return copter.connect("radio://1/10/250KPS");
     }).then(function() {
       console.log('copter is ready')
       console.log('lag is ', tb.lag())
@@ -47,49 +47,63 @@ var quad_state = {
   target_throttle_time: 0
 };
 
+var quad_state = {
+  pitch: {
+    target_value: 0,
+    last_setting: 0,
+    target_time: 0
+  },
+  roll: {
+    target_value: 0,
+    last_setting: 0,
+    target_time: 0
+  },
+  yaw: {
+    target_value: 0,
+    last_setting: 0,
+    target_time: 0
+  },
+  thrust: {
+    target_value: 0,
+    last_setting: 0,
+    target_time: 0
+  }
+};
+
+
+
 var commands = [{
-  action: flyTo,
+  run: flyTo,
   period: 2000,
-  target_throttle: 45000
+  end_value: {
+    thrust: 20000
+  }
 }, {
-  action: flyTo,
-  period: 200,
-  target_throttle: 37000
-}, {
-  action: flyTo,
-  period: 3000,
-  target_throttle: 37000
-}, {
-  action: flyTo,
+  run: flyTo,
   period: 2000,
-  target_throttle:10000
-}]
-
-
-  function pullNext() {
-    var current = commands.shift()
-    if (!current) process.exit();
-
-    current.action(current.period, current.target_throttle)
+  end_value: {
+    thrust: 10000
   }
+}];
 
-  function flyTo(ms, throttle) {
-    console.log('fly!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-    quad_state.target_throttle = throttle;
-    quad_state.target_throttle_time = Date.now() + ms;
+
+function pullNext() {
+  var current = commands.shift()
+  if (!current) {
+    copter.driver.setpoint(0, 0, 0, 0)
+    copter.shutdown();
+    process.exit();
   }
+  // console.log(current)
+  current.run(current.period, current.end_value)
+}
 
-  function land(ms) {
-    console.log('land!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-    quad_state.target_throttle = 10000;
-    quad_state.target_throttle_time = Date.now() + ms;
-    startControl()
-  }
+function flyTo(ms, target_values) {
+  console.log('fly!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+  quad_state.thrust.end_value = throttle;
+  quad_state.target_throttle_time = Date.now() + ms;
+}
 
-
-  function hover() {
-    flyTo(1, 35000, callback)
-  }
 
 var control;
 var send_every = 50;
