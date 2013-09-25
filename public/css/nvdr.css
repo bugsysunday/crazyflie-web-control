@@ -1,0 +1,15 @@
+body {
+  overflow-y:scroll;
+}
+
+text {
+  font: 12px sans-serif;
+}
+svg {
+  display: block;
+}
+#chart1 svg {
+  height: 500px;
+  min-width: 100px;
+  min-height: 100px;
+}
