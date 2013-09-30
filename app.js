@@ -54,7 +54,7 @@ function sendLogs() {
     if (gSocket) {
       gSocket.emit("telem", copter.telemetry)
     }
-    // console.log(copter.telemetry)
+    console.log(copter.telemetry)
 
   }, 100)
 }

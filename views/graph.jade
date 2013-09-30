@@ -3,13 +3,25 @@ html
         script(src='http://code.jquery.com/jquery-latest.js')
         script(src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.0.0/lodash.min.js")
         script(src='/javascripts/bootstrap.min.js')
-        script(src='/javascripts/graph.js')
+ 
         link(rel='stylesheet', href='/css/bootstrap.min.css')
         link(rel='stylesheet', href='/css/cust.css')
         link(href="/vendor/nvd3/src/nv.d3.css", rel="stylesheet", type="text/css")
         script(src='/socket.io/socket.io.js')
         //- script(src="http://threejs.org/build/three.min.js")
+        script(src="/vendor/nvd3/lib/d3.v3.js")
+        script(src="/vendor/nvd3/nv.d3.js")
+        script(src="/vendor/nvd3/src/tooltip.js")
+        script(src="/vendor/nvd3/src/utils.js")
+        script(src="/vendor/nvd3/src/models/legend.js")
+        script(src="/vendor/nvd3/src/models/axis.js")
+        script(src="/vendor/nvd3/src/models/scatter.js")
+        script(src="/vendor/nvd3/src/models/line.js")
+        script(src="/vendor/nvd3/src/models/lineWithFocusChart.js")
+        script(src='/javascripts/graph.js')
 
-        link(rel='stylesheet', href='/css/nvd3.css')
     body
-        
+        input(type="file", id="files", name="files[]", multiple)
+        output(id="list")
+      div(id="chart" class='with-3d-shadow with-transitions')
+            svg(style="height: 500px;")
