@@ -58,7 +58,7 @@ start()
 
 
 var control;
-var quad_update_interval = 20;
+var quad_update_interval = 50;
 var last_update;
 
 var quad_state = {
@@ -86,28 +86,19 @@ var quad_state = {
 };
 
 
+var angle = 90;
 
-
-var loop_angle = 30;
-var transition_time = 500;
 var commands = [{
-  run: flyTo,
-  period: 50,
+  run: setHard,
+  period: 400,
   target_values: {
     thrust: 60000
   }
 },{
   run: flyTo,
-  period: 400,
+  period: 500,
   target_values: {
-    thrust: 60000,
-    pitch:30
-  }
-}, {
-  run: flyTo,
-  period: 50,
-  target_values: {
-    thrust: 60000,
+    thrust: 40000,
     pitch:360,
     yaw:0
   }
@@ -115,33 +106,20 @@ var commands = [{
   run: flyTo,
   period: 200,
   target_values: {
-    thrust: 40000,
-    pitch:360
+    thrust: 50000,
+    pitch:-50,
+    yaw:0
   }
-}, {
-  run: flyTo,
-  period: 50,
-  target_values: {
-    thrust: 40000,
-    pitch:0
-  }
-}, {
+},{
   run: flyTo,
   period: 300,
   target_values: {
-    thrust: 60000,
-    pitch:0
-  }
-}, {
-  run: flyTo,
-  period: 50,
-  target_values: {
     thrust: 40000,
     pitch:0
   }
 }, {
   run: flyTo,
-  period: 2000,
+  period: 1500,
   target_values: {
     thrust: 15000
 
@@ -181,6 +159,14 @@ function flyTo(ms, target_values) {
   // console.log(quad_state)
 }
 
+function setHard(ms, target_values) {
+    var now = Date.now();
+  _.each(target_values, function(target_value, variable) {
+    quad_state[variable].target_value = target_value;
+    quad_state[variable].last_setting = target_value;
+    quad_state[variable].target_time = now + ms;
+  });
+}
 
 
 

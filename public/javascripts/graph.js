@@ -107,7 +107,7 @@ window.onload = function() {
     console.log(tdata)
     d3.select('#chart svg').datum(tdata).call(chart);
     v = 1
-
+    
     var interval = setInterval(function() {
       v += .2
       if (tdata[0].values.length > 100) {
